@@ -1,13 +1,18 @@
 package app
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"bookshelf-go/routes"
+	"os"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 func StartServer() {
 	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
+	routes.RouterContainer(app)
 
-	app.Listen(":3000")
+	port := os.Getenv("PORT")
+
+	app.Listen(port)
 }
