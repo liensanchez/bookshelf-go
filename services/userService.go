@@ -1,10 +1,32 @@
 package services
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"bookshelf-go/models"
+	"database/sql"
+)
 
-func Test() fiber.Handler {
+func GetUsers(db *sql.DB) ([]models.User, error) {
+	querySearch := "SELECT * FROM users"
 
-	return func(c *fiber.Ctx) error {
-		return c.SendString("Hola esto funciona")
+	var results []models.User
+
+	rows, err := db.Query(querySearch)
+	if err != nil {
+		return nil, err
 	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var usersFound models.User
+
+		err = rows.Scan(&usersFound.Id, &usersFound.Name, &usersFound.LastName, &usersFound.Shelf)
+		if err != nil {
+			return nil, err
+		}
+
+		results = append(results, usersFound)
+	}
+
+	return results, nil
+
 }

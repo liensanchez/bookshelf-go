@@ -2,9 +2,10 @@ package main
 
 import (
 	"bookshelf-go/app"
+	"bookshelf-go/database"
 )
 
 func main() {
-	app.StartServer()
-
+	db := database.StartDatabase(false)
+	app.StartServer(db)
 }

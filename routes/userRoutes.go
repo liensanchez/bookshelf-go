@@ -1,12 +1,14 @@
 package routes
 
 import (
-	"bookshelf-go/services"
+	"bookshelf-go/handler"
+	"database/sql"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func UserRoutes(users fiber.Router) {
+func UserRoutes(users fiber.Router, db *sql.DB) {
 
-	users.Get("/", services.Test())
+	users.Get("/", handler.UserHandler(db))
+
 }
