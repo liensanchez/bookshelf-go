@@ -9,6 +9,7 @@ import (
 
 func UserRoutes(users fiber.Router, db *sql.DB) {
 
-	users.Get("/", handler.UserHandler(db))
+	users.Get("/", handler.GetUserHandler(db))
 
+	users.Post("/create", handler.CreateUserHandler(db))
 }

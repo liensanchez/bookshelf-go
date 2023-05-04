@@ -3,6 +3,7 @@ package services
 import (
 	"bookshelf-go/models"
 	"database/sql"
+	"fmt"
 )
 
 func GetUsers(db *sql.DB) ([]models.User, error) {
@@ -28,5 +29,15 @@ func GetUsers(db *sql.DB) ([]models.User, error) {
 	}
 
 	return results, nil
+}
 
+func CreateUser(db *sql.DB, user *models.User) (*models.User, error) {
+	query := fmt.Sprintf("INSERT INTO users (name, lastname) VALUES ('%v', '%v')  RETURNING id, name, lastname, shelf_id", user.Name, user.LastName)
+
+	err := db.QueryRow(query).Scan(&user.Id, &user.Name, &user.LastName, &user.Shelf)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }

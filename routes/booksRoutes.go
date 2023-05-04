@@ -8,5 +8,7 @@ import (
 
 func BooksRoutes(books fiber.Router) {
 
-	books.Get("/", handler.BookHandler)
+	books.Get("/", handler.GetBooksHandler)
+
+	books.Get("/:id", handler.OneBookHandler)
 }

@@ -23,7 +23,7 @@ type Response struct {
 
 func GetBooks() (Response, error) {
 
-	url := "http://gutendex.com/books/"
+	url := "http://gutendex.com/books?sort=ascending"
 
 	responseURL, err := http.Get(url)
 	if err != nil {
@@ -37,6 +37,31 @@ func GetBooks() (Response, error) {
 	}
 
 	var response Response
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		fmt.Println("Error occurred while unmarshaling response:", err)
+		return response, err
+	}
+
+	return response, nil
+}
+
+func GetOneBook(id string) (Book, error) {
+
+	url := fmt.Sprintf("http://gutendex.com/books/%v/", id)
+
+	responseURL, err := http.Get(url)
+	if err != nil {
+		fmt.Println("Error en solicitud")
+	}
+	defer responseURL.Body.Close()
+
+	body, err := io.ReadAll(responseURL.Body)
+	if err != nil {
+		fmt.Println("Error en lectura")
+	}
+
+	var response Book
 	err = json.Unmarshal(body, &response)
 	if err != nil {
 		fmt.Println("Error occurred while unmarshaling response:", err)
